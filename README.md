@@ -1,415 +1,533 @@
-# Superstore Sales Data Analysis
+# 📊 Online Education Student Engagement & Dropout Risk Analysis
 
 ## 📌 Project Overview
 
-This project performs **Exploratory Data Analysis (EDA)** on a Superstore sales dataset using Python.
+Online learning platforms generate a large amount of student interaction data. One important question is:
 
-The analysis focuses on understanding sales, profit, quantity, discounts, customer segments, product categories, regions, and delivery time. Python libraries such as **Pandas, NumPy, Matplotlib, and Seaborn** are used for data processing, analysis, and visualization.
+> **Can student engagement be used to understand academic performance, predict student success, and identify dropout risk?**
 
-## The dataset contains **10,194 records and 21 original columns**. A new `Delivery Days` column is also created during the analysis.
+This project analyzes online learning activity using student engagement and academic performance data.
 
-## 🎯 Objectives
+The analysis focuses particularly on the relationship between:
 
-The main objectives of this task are:
+* Student online activity
+* Number of clicks/interactions
+* Academic scores
+* Engagement level
+* Performance level
+* Pass/fail status
+* Dropout/withdrawal risk
+* Final academic outcome
 
-* Load the Superstore dataset.
-* Understand the structure and characteristics of the data.
-* Inspect the first few records.
-* Check data types and dataset information.
-* Generate descriptive statistics.
-* Convert order and shipping dates into datetime format.
-* Calculate delivery duration.
-* Identify unique product categories.
-* Check for missing values.
-* Analyze sales by product category.
-* Create visualizations to understand sales performance.
-* Extract useful business insights from the dataset.
+The project uses **Python, Pandas, NumPy, and data analysis techniques** to explore patterns in student engagement and academic outcomes.
 
 ---
 
-## 📊 Dataset
+## 🎯 Objectives
 
-The dataset used in this project is:
+The main objectives of this project are:
+
+1. Analyze student engagement in an online learning environment.
+2. Understand how online activity relates to academic performance.
+3. Examine the relationship between `total_clicks` and student outcomes.
+4. Compare pass rates across different engagement levels.
+5. Identify students associated with higher dropout risk.
+6. Analyze the distribution of final academic outcomes.
+7. Generate meaningful insights from student interaction data.
+
+---
+
+## 📂 Dataset
+
+The project uses the following dataset:
 
 ```text
-samplesuperstore.csv
+online_education_dataset.csv
 ```
 
-The dataset contains information related to:
+The dataset contains **32,593 student records** and includes demographic, academic, engagement, performance, risk, and outcome-related information.
 
-* Order ID
-* Order Date
-* Ship Date
-* Ship Mode
-* Customer ID
-* Customer Name
-* Segment
-* Country/Region
-* City
-* State/Province
-* Postal Code
-* Region
-* Product ID
-* Category
-* Sub-Category
-* Product Name
-* Sales
-* Quantity
-* Discount
-* Profit
+### Important Features
 
-The original dataset contains **21 columns** and **10,194 rows**.
+| Feature             | Description                               |
+| ------------------- | ----------------------------------------- |
+| `id_student`        | Unique student identifier                 |
+| `gender`            | Student gender                            |
+| `region`            | Student geographical region               |
+| `highest_education` | Highest education qualification           |
+| `studied_credits`   | Number of credits studied                 |
+| `imd_band`          | Socioeconomic/deprivation band            |
+| `total_clicks`      | Total online learning interactions/clicks |
+| `avg_score`         | Average student score                     |
+| `engagement_level`  | Student engagement category               |
+| `performance_level` | Student performance category              |
+| `risk_level`        | Student dropout/risk category             |
+| `pass_flag`         | Indicates whether the student passed      |
+| `dropout_flag`      | Indicates whether the student dropped out |
+| `final_result`      | Final academic outcome                    |
+
+The notebook shows three engagement categories:
+
+```text
+High
+Medium
+Low
+```
+
+and four final-result categories:
+
+```text
+Pass
+Withdrawn
+Fail
+Distinction
+```
 
 ---
 
 ## 🛠️ Technologies Used
 
-| Technology       | Purpose                       |
-| ---------------- | ----------------------------- |
-| Python           | Programming language          |
-| Pandas           | Data loading and manipulation |
-| NumPy            | Numerical operations          |
-| Matplotlib       | Data visualization            |
-| Seaborn          | Statistical visualization     |
-| Google Colab     | Development environment       |
-| Jupyter Notebook | Interactive analysis          |
+The project is implemented using Python and commonly used data-analysis libraries.
 
----
+### Programming Language
+
+* Python
+
+### Libraries
+
+* **NumPy** – Numerical computing
+* **Pandas** – Data loading, manipulation, grouping, and analysis
+
+## The notebook begins by importing NumPy and Pandas and loads the dataset using `pd.read_csv()`.
 
 ## 📁 Project Structure
 
+A recommended project structure is:
+
 ```text
-Superstore-Sales-Analysis/
+Online-Education-Engagement-Analysis/
 │
-├── samplesuperstore.csv
-├── Superstore_Sales_Analysis.ipynb
-└── README.md
+├── online_education_dataset.csv
+├── online_education_analysis.ipynb
+├── README.md
+│
+└── outputs/
+    ├── charts/
+    └── analysis_results/
 ```
 
 ---
 
-## 🔄 Analysis Workflow
+## 🚀 Getting Started
 
-The project follows these major steps:
-
-```text
-Load Dataset
-     ↓
-Understand Dataset
-     ↓
-Data Inspection
-     ↓
-Descriptive Statistics
-     ↓
-Date Conversion
-     ↓
-Feature Creation
-     ↓
-Missing Value Analysis
-     ↓
-Category Analysis
-     ↓
-Data Visualization
-     ↓
-Business Insights
-```
-
----
-
-## 1. Import Required Libraries
-
-The following Python libraries are imported:
-
-```python
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-```
-
-These libraries are used for data manipulation, numerical analysis, and visualization.
-
----
-
-## 2. Load the Dataset
-
-The CSV dataset is loaded using Pandas:
-
-```python
-df = pd.read_csv("/content/samplesuperstore.csv")
-```
-
-The first five rows are then displayed using:
-
-```python
-df.head()
-```
-
-The dataset contains fields related to orders, customers, products, sales, discounts, and profits.
-
----
-
-## 3. Dataset Information
-
-The `df.info()` function is used to understand:
-
-* Number of records
-* Number of columns
-* Column names
-* Data types
-* Non-null values
-* Memory usage
-
-The dataset contains **10,194 entries and 21 columns** before feature engineering.
-
----
-
-## 4. Descriptive Statistics
-
-The `describe()` function is used to obtain statistical information about numerical columns.
-
-```python
-df.describe()
-```
-
-The numerical columns include:
-
-* Row ID
-* Sales
-* Quantity
-* Discount
-* Profit
-
-For example, the mean sales value is approximately **228.23**, while the mean profit is approximately **28.67**.
-
----
-
-## 5. Date Conversion
-
-The `Order Date` and `Ship Date` columns are converted into datetime format:
-
-```python
-df['Order Date'] = pd.to_datetime(
-    df['Order Date'],
-    format='mixed'
-)
-
-df['Ship Date'] = pd.to_datetime(
-    df['Ship Date'],
-    format='mixed'
-)
-```
-
-This allows date-based calculations and analysis.
-
----
-
-## 6. Feature Engineering
-
-A new feature called `Delivery Days` is created.
-
-```python
-df['Delivery Days'] = (
-    df['Ship Date'] - df['Order Date']
-).dt.days
-```
-
-This calculates the number of days between the order date and shipping date.
-
-After creating this feature, the dataset contains **22 columns**.
-
----
-
-## 7. Product Category Analysis
-
-The dataset contains three main product categories:
-
-```text
-Office Supplies
-Furniture
-Technology
-```
-
-This is identified using:
-
-```python
-df['Category'].unique()
-```
-
-The notebook output confirms these three categories.
-
----
-
-## 8. Missing Value Analysis
-
-Missing values are checked using:
-
-```python
-df.isnull().sum()
-```
-
-The analysis shows **0 missing values** for all columns, including the newly created `Delivery Days` column.
-
-Therefore, no missing-value treatment is required for this dataset.
-
----
-
-## 9. Sales by Category
-
-Sales are grouped by product category:
-
-```python
-category_sales = (
-    df.groupby('Category')['Sales'].sum()
-)
-
-category_sales
-```
-
-The resulting total sales are:
-
-| Category        |  Total Sales |
-| --------------- | -----------: |
-| Furniture       | 754,747.7613 |
-| Office Supplies | 731,893.3140 |
-| Technology      | 839,893.2790 |
-
-According to the analysis, **Technology has the highest total sales**, followed by Furniture and Office Supplies.
-
----
-
-## 10. Sales Visualization
-
-A bar chart is created to visualize sales by category:
-
-```python
-category_sales.plot(
-    kind='bar',
-    figsize=(8,5)
-)
-
-plt.title("Sales by Category")
-plt.ylabel("Total Sales")
-plt.show()
-```
-
-This visualization makes it easier to compare sales performance between the three product categories.
-
----
-
-## 📈 Key Findings
-
-Based on the analysis performed in the notebook:
-
-1. The dataset contains **10,194 sales records**.
-2. There are **21 original columns**.
-3. Two date columns were converted to datetime format.
-4. A new `Delivery Days` feature was created.
-5. The dataset contains three product categories:
-
-   * Furniture
-   * Office Supplies
-   * Technology
-6. No missing values were identified.
-7. **Technology** generated the highest total sales among the three categories.
-8. Sales and profit show considerable variation across transactions, as reflected in the descriptive statistics.
-
----
-
-## 💡 Business Insights
-
-The analysis can help a business understand:
-
-* Which product categories generate the most sales.
-* How sales vary across different products and regions.
-* The relationship between discounts and profitability.
-* Customer segment performance.
-* Shipping and delivery patterns.
-* Products or categories that may require further investigation.
-
----
-
-## ▶️ How to Run the Project
-
-### Option 1: Google Colab
-
-1. Open Google Colab.
-2. Upload the `.ipynb` notebook.
-3. Upload `samplesuperstore.csv`.
-4. Make sure the CSV is available at:
-
-```text
-/content/samplesuperstore.csv
-```
-
-5. Run the notebook cells from top to bottom.
-
-### Option 2: Jupyter Notebook
-
-Install the required libraries:
+### 1. Clone the Repository
 
 ```bash
-pip install pandas numpy matplotlib seaborn jupyter
+git clone <repository-url>
+cd Online-Education-Engagement-Analysis
 ```
 
-Then start Jupyter:
+### 2. Install Required Libraries
+
+```bash
+pip install numpy pandas matplotlib seaborn
+```
+
+### 3. Launch Jupyter Notebook
 
 ```bash
 jupyter notebook
 ```
 
-Open the notebook and ensure `samplesuperstore.csv` is available in the appropriate location.
-
----
-
-## 📦 Requirements
+Then open:
 
 ```text
-Python 3.x
-Pandas
-NumPy
-Matplotlib
-Seaborn
-Jupyter Notebook / Google Colab
+online_education_analysis.ipynb
+```
+
+### 4. Load the Dataset
+
+The notebook loads the dataset using:
+
+```python
+import pandas as pd
+
+df = pd.read_csv("online_education_dataset.csv")
+
+df.head()
 ```
 
 ---
 
-## 🚀 Future Improvements
+# 🔍 Analysis Performed
 
-The analysis can be extended by adding:
+## 1. Data Loading
 
-* Monthly and yearly sales trends
-* Profit by category and sub-category
-* Regional sales analysis
-* Customer segment analysis
-* Top and bottom performing products
-* Discount vs. profit analysis
-* Delivery-time analysis
+The dataset is loaded into a Pandas DataFrame.
+
+```python
+df = pd.read_csv("online_education_dataset.csv")
+```
+
+The first few records are inspected using:
+
+```python
+df.head()
+```
+
+---
+
+## 2. Final Result Analysis
+
+The project examines the distribution of students according to their final academic result.
+
+The notebook reports:
+
+| Final Result | Number of Students |
+| ------------ | -----------------: |
+| Pass         |             12,361 |
+| Withdrawn    |             10,156 |
+| Fail         |              7,052 |
+| Distinction  |              3,024 |
+
+These results show that **withdrawal is a substantial outcome in the dataset**, making student retention an important aspect of the analysis.
+
+---
+
+## 3. Engagement-Level Analysis
+
+Student engagement is divided into three levels:
+
+```text
+High
+Medium
+Low
+```
+
+The project compares the average `pass_flag` for each engagement category.
+
+The notebook produces the following results:
+
+| Engagement Level | Pass Rate |
+| ---------------- | --------: |
+| High             |    78.14% |
+| Medium           |    57.15% |
+| Low              |    19.92% |
+
+These results indicate a strong relationship in this dataset between engagement level and passing outcome: students in the **High engagement** group have the highest observed pass rate, while students in the **Low engagement** group have the lowest.
+
+---
+
+## 4. Student Performance Analysis
+
+The dataset contains an `avg_score` variable representing average academic score.
+
+It also includes a derived categorical variable:
+
+```text
+performance_level
+```
+
+with categories such as:
+
+```text
+High
+Medium
+Low
+```
+
+This allows student academic performance to be examined alongside their online engagement.
+
+---
+
+## 5. Dropout Risk Analysis
+
+The project also contains a:
+
+```text
+risk_level
+```
+
+feature.
+
+Risk categories include:
+
+```text
+Low Risk
+High Risk
+Very High Risk
+```
+
+The `dropout_flag` feature is used to represent dropout status.
+
+```text
+dropout_flag = 0 → Not dropped out
+dropout_flag = 1 → Dropped out
+```
+
+This allows student engagement and performance information to be examined in relation to dropout risk.
+
+---
+
+# 📈 Key Findings
+
+Based on the executed notebook results:
+
+### 1. Student outcomes are diverse
+
+Students fall into four final-result categories:
+
+* Pass
+* Withdrawn
+* Fail
+* Distinction
+
+The dataset contains **10,156 withdrawn students**, indicating that retention is a significant area of interest.
+
+### 2. Engagement is strongly associated with passing
+
+The observed pass rates increase substantially as engagement increases:
+
+```text
+Low Engagement     → 19.92%
+Medium Engagement  → 57.15%
+High Engagement    → 78.14%
+```
+
+### 3. Online activity provides useful information
+
+The dataset includes `total_clicks` as a measure of online interaction. This enables analysis of how student activity relates to academic performance and retention.
+
+### 4. Academic performance and engagement can be studied together
+
+The dataset combines:
+
+```text
+Online Engagement
+       ↓
+Total Clicks
+       ↓
+Academic Score
+       ↓
+Performance Level
+       ↓
+Final Result
+       ↓
+Dropout Risk
+```
+
+This provides a useful framework for understanding student outcomes in online education.
+
+---
+
+# 💡 Business / Educational Insights
+
+The analysis can help educational institutions understand students' learning behavior.
+
+For example:
+
+### Early Identification
+
+Students showing low engagement could potentially be identified for additional academic support.
+
+### Student Retention
+
+High withdrawal numbers indicate the importance of understanding factors associated with student retention.
+
+### Academic Support
+
+Students with lower engagement and lower academic performance may benefit from targeted intervention.
+
+### Data-Driven Education
+
+Online interaction data can provide institutions with additional information for understanding student progress and outcomes.
+
+> **Important:** The analysis identifies relationships in the available dataset. It does not by itself establish that low engagement causes dropout or poor academic performance.
+
+---
+
+# 📊 Example Analysis Workflow
+
+```text
+                 Dataset
+                    │
+                    ▼
+             Data Loading
+                    │
+                    ▼
+             Data Inspection
+                    │
+                    ▼
+          Engagement Analysis
+                    │
+                    ▼
+        Academic Performance
+                    │
+                    ▼
+            Pass Analysis
+                    │
+                    ▼
+           Dropout Analysis
+                    │
+                    ▼
+          Final Result Analysis
+                    │
+                    ▼
+             Key Insights
+```
+
+---
+
+# 🔬 Sample Code
+
+### Import Libraries
+
+```python
+import numpy as np
+import pandas as pd
+```
+
+### Load Dataset
+
+```python
+df = pd.read_csv("online_education_dataset.csv")
+```
+
+### Display First Records
+
+```python
+df.head()
+```
+
+### Analyze Final Results
+
+```python
+df["final_result"].value_counts()
+```
+
+### Calculate Pass Rate by Engagement
+
+```python
+df.groupby("engagement_level")["pass_flag"].mean()
+```
+
+---
+
+# 📌 Dataset Summary
+
+The dataset contains:
+
+```text
+Rows: 32,593
+Unique Students: 28,785
+```
+
+Important numerical variables include:
+
+```text
+studied_credits
+total_clicks
+avg_score
+pass_flag
+dropout_flag
+```
+
+Categorical variables include:
+
+```text
+gender
+region
+highest_education
+imd_band
+engagement_level
+performance_level
+risk_level
+final_result
+```
+
+The notebook's dataset summary confirms these fields and their observed category counts.
+
+---
+
+# 🎓 Conclusion
+
+This project demonstrates how online learning interaction data can be analyzed to understand student academic outcomes and retention.
+
+The analysis shows a clear pattern in the dataset:
+
+> **Higher student engagement is associated with a higher observed pass rate.**
+
+High-engagement students have an observed pass rate of approximately **78.14%**, compared with approximately **19.92%** for low-engagement students.
+
+At the same time, the dataset contains a considerable number of withdrawn students, highlighting the importance of understanding student retention in online education.
+
+Overall, this project demonstrates the value of using **data analysis to identify patterns in student engagement, performance, success, and dropout risk**.
+
+---
+
+# 🔮 Future Improvements
+
+The project can be extended by adding:
+
+* Exploratory Data Analysis (EDA)
 * Correlation analysis
-* Sales and profit dashboards using Power BI
-* Interactive visualizations
+* Additional visualizations
+* Feature engineering
+* Statistical analysis
+* Student dropout prediction
+* Machine learning classification models
+* Model evaluation using accuracy, precision, recall, and F1-score
+* Feature importance analysis
+* Student risk prediction dashboard
+
+These extensions would allow the project to move from descriptive analysis toward predictive student-success and dropout-risk modeling.
 
 ---
 
-## 📝 Conclusion
+# 👩‍💻 Project Information
 
-This project demonstrates how Python can be used to perform **Exploratory Data Analysis on retail sales data**.
+**Project Title:**
+Online Education Student Engagement & Dropout Risk Analysis
 
-The workflow includes data loading, data inspection, descriptive statistics, date transformation, feature engineering, missing-value analysis, category analysis, and visualization.
+**Domain:**
+Education / Data Science
 
-The analysis identifies **Technology as the category with the highest total sales** in the dataset and provides a foundation for further business and sales analysis.
+**Programming Language:**
+Python
+
+**Primary Libraries:**
+NumPy, Pandas
+
+**Dataset:**
+Online Education Dataset
+
+**Analysis Type:**
+Student Engagement, Academic Performance & Retention Analysis
 
 ---
 
-## 👩‍💻 Author
+## ⭐ Project Highlights
 
-**Periyanayagi**
-
-Data Science / Data Analytics
+```text
+✔ 32,593 student records analyzed
+✔ Student engagement analysis
+✔ Academic performance analysis
+✔ Pass-rate analysis
+✔ Dropout-risk analysis
+✔ Final-result analysis
+✔ Data-driven educational insights
+```
 
 ---
 
-## 📄 License
+## 📜 License
 
-This project is intended for **educational and learning purposes**.
+This project is intended for educational and analytical purposes.
+
+If the dataset is distributed under a separate license, the original dataset license and attribution requirements should be followed.
+
+---
+
+## 🙏 Acknowledgement
+
+This project demonstrates the application of Python-based data analysis techniques to online education data and explores how student engagement can be related to academic success and retention.
